@@ -1,0 +1,45 @@
+
+<mat-card class="content" fxFlex fxLayoutAlign="center center" fxLayout="column" fxFlexWrap="wrap"
+          [style.borderRadius.px]="'10'"  [style.paddingTop.px]="'60'"
+>
+
+  <div class="record" [matTooltip]=" 'app.record.max-seconds' | translate " fxFlex>
+    <svg width="120" height="120" viewBox="0 0 120 120" class="progress__svg">
+      <circle
+        [attr.r]="radius"
+        cx="60"
+        cy="60"
+        stroke-width="12"
+        class="progress__meter"
+      />
+      <circle
+        [style.strokeDasharray]="circumference"
+        [style.strokeDashoffset]="dashoffset"
+        [attr.r]="radius"
+        cx="60"
+        cy="60"
+        stroke-width="12"
+        class="progress__value"
+      />
+    </svg>
+
+    <div class="record-time" > {{recordedTime}} </div>
+  </div>
+
+
+  <div class="record-buttons" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxFill fxFlex>
+    <button mat-raised-button color="primary" *ngIf="!isRecording && !blobUrl" (click)="startRecording()"   [matTooltip]="'app.record.start' | translate" ><mat-icon>mic</mat-icon></button>
+    <button mat-raised-button color="warn"    *ngIf="isRecording && !blobUrl" (click)="stopRecording()"     [matTooltip]="'app.record.stop'  | translate" ><mat-icon>stop</mat-icon></button>
+
+    <button mat-raised-button color="primary" *ngIf="!isRecording && blobUrl" (click)="sendRecording()"     [matTooltip]="'app.record.send'  | translate" ><mat-icon>send</mat-icon></button>
+    <button mat-raised-button color="accent"  *ngIf="!isRecording && blobUrl" (click)="abortRecording()"    [matTooltip]="'app.record.clear' | translate" ><mat-icon>delete</mat-icon></button>
+  </div>
+
+
+  <div class="player" fxFlex>
+    <audio *ngIf="!isRecording && blobUrl"  controls>
+      <source [src]="blobUrl" type="audio/webm">
+    </audio>
+  </div>
+
+</mat-card>

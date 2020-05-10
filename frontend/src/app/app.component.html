@@ -1,0 +1,36 @@
+
+<mat-card class="content" fxFlex fxLayoutAlign="center center" fxLayout="column" fxFlexWrap="wrap"
+          [style.borderRadius.px]="'10'"  [style.paddingTop.px]="'60'"
+>
+
+  <div class="repeat" fxFlex>
+
+    <form class="example-form">
+      <mat-form-field class="example-full-width" >
+        <mat-label>{{ 'app.receive.repeat-label' | translate }}</mat-label>
+        <input matInput [formControl]="repeatFormControl"  [placeholder]=" 'app.receive.repeat-holder' | translate">
+        <button mat-button *ngIf="repeatFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="repeatFormControl.patchValue(1)" [matTooltip]="'app.receive.reset' | translate">
+          <mat-icon>360</mat-icon>
+        </button>
+        <mat-error *ngIf="repeatFormControl.hasError('pattern')"  [innerHtml]="'app.receive.error.number-valid' | translate | sanitizeHtml" ></mat-error>
+        <mat-error *ngIf="repeatFormControl.hasError('min')"      [innerHtml]="'app.receive.error.number-min' | translate | sanitizeHtml" ></mat-error>
+        <mat-error *ngIf="repeatFormControl.hasError('required')" [innerHtml]="'app.receive.error.number-required' | translate | sanitizeHtml" ></mat-error>
+      </mat-form-field>
+    </form>
+
+  </div>
+
+
+  <div class="receive-buttons" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxFill fxFlex>
+    <button mat-raised-button color="primary" (click)="register()"  [matTooltip]="'app.receive.register' | translate" [disabled]="isRegister"><mat-icon>snooze</mat-icon></button>
+    <button mat-raised-button color="warn"    (click)="cancel()"    [matTooltip]="'app.receive.cancel' | translate"   [disabled]="!isRegister"><mat-icon>stop</mat-icon></button>
+  </div>
+
+
+  <div class="player" fxFlex>
+    <audio #audioRef  *ngIf="!isReceiving && blobUrl"  controls>
+      <source [src]="blobUrl" type="audio/webm">
+    </audio>
+  </div>
+
+</mat-card>

@@ -1,0 +1,14 @@
+{
+  "app": {
+    "record": {
+      "start": "Start recording",
+      "stop": "Stop recording",
+      "send": "Send recording",
+      "clear": "Clear recording",
+      "max-seconds": "Recording max. 20s"
+    }
+  },
+  "globals": {
+    "translateError": "Could not translate"
+  }
+}

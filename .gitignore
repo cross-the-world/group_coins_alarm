@@ -1,0 +1,10 @@
+node_modules/
+.idea/
+tmp/
+dist/
+logs/
+
+sqlite3/sqlite-dll-win64-x64-3310100/
+sqlite3/sqlite-tools-win32-x86-3310100/
+
+package-lock.json

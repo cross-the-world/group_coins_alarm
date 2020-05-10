@@ -1,0 +1,95 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Group-Coins-Alarm API",
+    "version": "1.0.0",
+    "title": "Group-Coins-Alarml"
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "backend",
+      "description": "Everything about backend"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/api/config/styles/:key": {
+      "get": {
+        "tags": [
+          "config"
+        ],
+        "summary": "Main style corresponding to tenant",
+        "description": "",
+        "operationId": "styles",
+        "produces": [
+          "text/css"
+        ],
+        "responses": {
+          "200": {
+            "description": "Main style is loaded"
+          }
+        }
+      }
+    },
+    "/api/send": {
+      "post": {
+        "tags": [
+          "send"
+        ],
+        "summary": "send signal",
+        "description": "",
+        "operationId": "send",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "soundBlob",
+            "in": "formData",
+            "description": "Audio file upload",
+            "type": "file",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Send audio/text to server to notify registered members"
+          }
+        }
+      }
+    },
+
+    "/api/receive": {
+      "get": {
+        "tags": [
+          "receive"
+        ],
+        "summary": "receive signal",
+        "description": "",
+        "operationId": "receive",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "Receive audio/text to server from member"
+          }
+        }
+      }
+    }
+
+
+  },
+  "securityDefinitions": {
+  },
+  "definitions": {
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

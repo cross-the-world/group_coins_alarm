@@ -1,0 +1,79 @@
+
+.content {
+  height: 80%;
+  width: 80%;
+  margin: 10%;
+  background-color: #000000 !important;
+}
+
+
+.content > div {
+  margin: 10px;
+}
+
+.record-buttons {
+  margin: 0;
+  padding: 0;
+  width: 80%;
+}
+
+.record-buttons > button {
+  margin: 10px;
+}
+
+.record {
+  position: relative;
+}
+
+.record-time {
+  position: absolute;
+  top: 48px;
+  left: 36px;
+  font-size: 20px;
+  color: white;
+}
+
+.progress__svg {
+  transform: rotate(-90deg);
+  align-content: center;
+  align-items: center;
+}
+
+.progress__meter,
+.progress__value {
+  fill: none;
+}
+
+.progress__meter {
+  stroke: #ccc;
+}
+
+.progress__value {
+  stroke: #4CAF50;
+  transition: all 100ms;
+}
+
+audio {
+  outline: none !important;
+  border: none !important;
+}
+
+@media screen and (min-width: 600px) and (max-width: 959px) {
+ ::ng-deep .mat-icon {
+   line-height: 24px !important;
+   font-size: 24px !important;
+   width: 24px !important;
+   height: 24px !important;
+ }
+
+}
+
+@media screen and (max-width: 599px) {
+ ::ng-deep .mat-icon {
+   line-height: 20px !important;
+   font-size: 20px !important;
+   width: 20px !important;
+   height: 20px !important;
+ }
+
+}

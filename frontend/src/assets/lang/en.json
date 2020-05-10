@@ -1,0 +1,19 @@
+{
+  "app": {
+    "receive": {
+      "repeat-holder": "How many times should it repeat",
+      "repeat-label": "Repeating times",
+      "register": "Register audio receiving",
+      "cancel": "Cancel audio receiving",
+      "reset": "Reset repeat times to 1",
+      "error": {
+        "number-valid": "Please enter a <strong>valid</strong> number",
+        "number-min": "Please enter a number greater than or equal <strong>1</strong>",
+        "number-required": "Repeat times is <strong>required</strong>"
+      }
+    }
+  },
+  "globals": {
+    "translateError": "Could not translate"
+  }
+}
