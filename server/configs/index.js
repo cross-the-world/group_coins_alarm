@@ -23,7 +23,7 @@ const configs = {
 
         sql: {
             dev_dir: "E:/Documents/Learning/TradingAlarm/sqlite3/data",
-            prod_dir: "/usr/share/nginx/html/group_coins_alarm/sqlite3/data"
+            prod_dir: "/opt/sqlite3/data"
         }
 
     }
