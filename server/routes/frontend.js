@@ -45,7 +45,7 @@ class Frontend {
                     response.audio = {
                         "key": r.ID,
                         "name": r.audio_name,
-                        "path": path.join(__dirname, '../tmp', r.audio_name),
+                        "path": path.join(__dirname, '../tmp', (hashKey + r.ID.toString() + r.audio_name)),
                         "content": r.audio
                     }
                     return sqlite.insert(db, `insert into AudioPlayed (id, by_whom) VALUES (?,?)`, [r['ID'], hashKey]);

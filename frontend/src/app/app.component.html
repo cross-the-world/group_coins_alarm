@@ -41,8 +41,8 @@
 
 
     <div class="player" fxFlex>
-      <audio #audioRef  *ngIf="blobUrl"  controls>
-        <source [src]="blobUrl" [type]="blobType">
+      <audio #audioRef  controls>
+        <source [src]="blobUrl" [type]="blobType" *ngIf="blobUrl">
         Your browser don't support playing audio
       </audio>
     </div>

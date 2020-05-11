@@ -68,6 +68,7 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
     this.audioReceivingService.getReceivedBlobEvent().subscribe((data) => {
       this.toggleAudio(false);
       this.makeAudioUrl(data);
+      this.toggleAudio(true);
     });
 
     this.audioReceivingService.isReceivingEvent().subscribe((v) => {
@@ -80,6 +81,7 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
 
     this.repeatFormControl.valueChanges.subscribe(value => {
       console.log('repeat times has changed:', value)
+      this.toggleAudio(false);
       this.toggleAudio(true);
     });
 
@@ -133,12 +135,13 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
 
   @ViewChild('audioRef', { static: false }) set content(content: ElementRef) {
     this.audioPlayerRef = (content) ? content.nativeElement : null;
-    this.toggleAudio(true);
+    //this.toggleAudio(true);
   }
 
   private playListener = () => {
     this.audioPlayingSubscriber = timer(1000).subscribe((v) => {
       if (this.count < this.repeatFormControl.value) {
+        this.count++;
         this.audioPlayerRef.play();
       } else {
         this.audioPlayerRef.pause();
@@ -172,13 +175,17 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
 
   makeAudioUrl(data: any) {
     if (!data || !data.content) {
-      this.blobUrl = null;
+      this.blobUrl = "";
       return;
     }
-    Helpers.createUrl(data.name, data.content, data.type, u => {
-      this.blobType = data.type || "";
-      this.blobUrl = (u) ? this.sanitizer.bypassSecurityTrustUrl(u) : null;
-    });
+
+    if (data.content) {
+      Helpers.createUrl(data.name, data.content, data.type, u => {
+        this.blobType = data.type || "audio/mp3";
+        this.blobUrl = (u) ? this.sanitizer.bypassSecurityTrustUrl(u) : "";
+      });
+      return;
+    }
 
   }
 
