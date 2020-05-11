@@ -36,8 +36,8 @@ class Sqlite {
     open(dir, mode = this.read_only()) {
         const self = this;
         return new Promise((resolve, reject) => {
-	//	logger.info(path.join(dir, Sqlite.DBNAME));
-		let db = new sqlite3.Database(path.join(dir, Sqlite.DBNAME), mode, err => self.handleError(err, reject, 'database opened', () => resolve(db) ));
+	    //	logger.info(path.join(dir, Sqlite.DBNAME));
+            let db = new sqlite3.Database(path.join(dir, Sqlite.DBNAME), mode, err => self.handleError(err, reject, 'database opened', () => resolve(db) ));
         });
     }
 

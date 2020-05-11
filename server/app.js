@@ -108,6 +108,8 @@ app.get( '/api/config/styles/:key', swaggerValidator.validate, routes.getMainSty
 app.post( '/api/send', upload.single('soundBlob'), swaggerValidator.validate, routes_backend.send );
 
 
+
+
 // === FRONTEND ===
 app.get( '/api/receive', swaggerValidator.validate, routes_frontend.receive );
 

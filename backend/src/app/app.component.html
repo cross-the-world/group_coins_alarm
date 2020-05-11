@@ -3,7 +3,7 @@
           [style.borderRadius.px]="'10'"  [style.paddingTop.px]="'60'"
 >
 
-  <div class="record" [matTooltip]=" 'app.record.max-seconds' | translate " fxFlex>
+  <div class="record" [matTooltip]=" 'app.record.max-seconds' | translate " [matTooltipDisabled]="disableHover" fxFlex>
     <svg width="120" height="120" viewBox="0 0 120 120" class="progress__svg">
       <circle
         [attr.r]="radius"
@@ -27,12 +27,12 @@
   </div>
 
 
-  <div class="record-buttons" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxFill fxFlex>
-    <button mat-raised-button color="primary" *ngIf="!isRecording && !blobUrl" (click)="startRecording()"   [matTooltip]="'app.record.start' | translate" ><mat-icon>mic</mat-icon></button>
-    <button mat-raised-button color="warn"    *ngIf="isRecording && !blobUrl" (click)="stopRecording()"     [matTooltip]="'app.record.stop'  | translate" ><mat-icon>stop</mat-icon></button>
+  <div class="record-buttons" fxLayout="row" fxLayoutAlign="center center" fxFill fxFlex>
+    <button mat-raised-button color="primary" *ngIf="!isRecording && !blobUrl" (click)="startRecording()"   [matTooltip]="'app.record.start' | translate" [matTooltipDisabled]="disableHover"><mat-icon>mic</mat-icon></button>
+    <button mat-raised-button color="warn"    *ngIf="isRecording && !blobUrl" (click)="stopRecording()"     [matTooltip]="'app.record.stop'  | translate" [matTooltipDisabled]="disableHover"><mat-icon>stop</mat-icon></button>
 
-    <button mat-raised-button color="primary" *ngIf="!isRecording && blobUrl" (click)="sendRecording()"     [matTooltip]="'app.record.send'  | translate" ><mat-icon>send</mat-icon></button>
-    <button mat-raised-button color="accent"  *ngIf="!isRecording && blobUrl" (click)="abortRecording()"    [matTooltip]="'app.record.clear' | translate" ><mat-icon>delete</mat-icon></button>
+    <button mat-raised-button color="primary" *ngIf="!isRecording && blobUrl" (click)="sendRecording()"     [matTooltip]="'app.record.send'  | translate" [matTooltipDisabled]="disableHover"><mat-icon>send</mat-icon></button>
+    <button mat-raised-button color="accent"  *ngIf="!isRecording && blobUrl" (click)="abortRecording()"    [matTooltip]="'app.record.clear' | translate" [matTooltipDisabled]="disableHover"><mat-icon>delete</mat-icon></button>
   </div>
 
 
