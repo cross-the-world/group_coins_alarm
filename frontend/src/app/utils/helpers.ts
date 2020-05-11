@@ -9,6 +9,7 @@ export class Helpers {
   ////////////////////////////////////////////////////////////////////////////////////////////////////
 
   static defaultMime = 'application/octet-stream'; // this default mime also triggers iframe downloads;
+  static defaultAudioMime = 'audio/webm"'; // this default mime also triggers iframe downloads;
   static PREFIX_MIME_FILE = 'MIMEFILE';
 
 
@@ -62,6 +63,16 @@ export class Helpers {
   static isMobileDevice() {
       return ( (typeof window.orientation !== "undefined")) || ((navigator.userAgent.indexOf('IEMobile') !== -1) || Helpers.deviceOS() );
   };
+
+  static touchIsClick(event, when, start): number {
+    if (when === 'start') {
+      return new Date().getTime();
+    }
+    const t = new Date().getTime();
+    return (when === 'end' && ((t - start) < 1000) ) ? 0 : t;
+  }
+
+
 
   static createObjectURL(blob: any) {
     const cou = (window.URL || (window as any).webkitURL || URL || {}).createObjectURL || null;
@@ -158,13 +169,38 @@ export class Helpers {
     }
   } // end saveDataToFile
 
-  static touchIsClick(event, when, start): number {
-    if (when === 'start') {
-      return new Date().getTime();
+  static createUrl(name: string, data: any, type?: string, cb = (url) => {}) {
+    const w = (window as any);
+    let myBlob = (w.Blob || w.MozBlob || w.WebKitBlob || toString);
+    myBlob= myBlob.call ? myBlob.bind(w) : Blob;
+
+    const t = type || data.type || this.defaultAudioMime;
+    console.log(t);
+    const blob = new myBlob([data], {type: t});
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if ( navigator && navigator.msSaveBlob ) {
+      navigator.msSaveOrOpenBlob( blob, name );
+      return;
     }
-    const t = new Date().getTime();
-    return (when === 'end' && ((t - start) < 1000) ) ? 0 : t;
-  }
+
+    const u = this.createObjectURL(blob);
+    console.log(u);
+    let isSuccess = true;
+    const self = this;
+    if (u) {
+      cb(u);
+    } else {
+      const reader = new FileReader();
+      reader.onloadend = function(e){
+        console.log(reader.result);
+        cb(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+  } // end createUrl
+
 
 
 }

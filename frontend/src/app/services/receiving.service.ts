@@ -18,6 +18,7 @@ export class AudioReceivingService {
   private _isReceiving = new BehaviorSubject<boolean>(false);
 
   private _isRegister = new BehaviorSubject<boolean>(false);
+  private _interval = new BehaviorSubject<number>(this.MAX_INTERVAL);
 
   private getSubsriber;
   private takePeriodsSubscribed;
@@ -25,6 +26,9 @@ export class AudioReceivingService {
 
   constructor(private http: HttpClient) {
     this.isRegisterEvent().subscribe((v) => {
+      this.toggleListenerAudio();
+    });
+    this.intervalEvent().subscribe((v) => {
       this.toggleListenerAudio();
     });
   }
@@ -69,6 +73,14 @@ export class AudioReceivingService {
     return this._isRegister.asObservable();
   }
 
+  intervalEvent(): Observable<number> {
+    return this._interval.asObservable();
+  }
+
+  setInterval(i) {
+    this._interval.next(i);
+  }
+
 
   register() {
     this._isRegister.next(true);
@@ -81,34 +93,44 @@ export class AudioReceivingService {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getMaxRepeat() {
+  getDefaultMaxRepeat() {
     return this.MAX_REPEAT;
+  }
+
+  getDefaultMaxInterval() {
+    return this.MAX_INTERVAL;
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   private toggleListenerAudio() {
+    if (this.takePeriodsSubscribed) {
+      this.takePeriodsSubscribed.unsubscribe();
+    }
+    if (this.getSubsriber) {
+      this.getSubsriber.unsubscribe();
+    }
+    this._isReceiving.next(false);
     if (this._isRegister.getValue()) {
-      this.takePeriodsSubscribed = interval(this.MAX_INTERVAL)
+      this.takePeriodsSubscribed = interval(this._interval.getValue() || this.MAX_INTERVAL)
         .subscribe(r => {
           this.doGet();
         });
 
     } else {
-      if (this.takePeriodsSubscribed) {
-        this.takePeriodsSubscribed.unsubscribe();
-        this.getSubsriber.unsubscribe();
-        this._isReceiving.next(false);
-        this._received.next(null);
-      }
+      this._received.next(null);
     }
   }
 
   private updateAudio(obj) {
     this._isReceiving.next(false);
 
+    if (obj && obj.ok && !obj.body.type.includes('audio/') ) {
+      return;
+    }
+
     localStorage.removeItem(Helpers.lskAudioKey);
-    if (!obj || !obj.ok || obj.body.type == 'application/json') {
+    if (!obj || !obj.ok) {
       this._received.next(null);
       return;
     }
@@ -116,7 +138,11 @@ export class AudioReceivingService {
     const key = obj.headers.get('x-audio-key');
     const name = obj.headers.get('x-audio-name');
     localStorage.setItem(Helpers.lskAudioKey, key || "");
-    this._received.next(obj.body);
+    this._received.next({
+      content: obj.body,
+      type: obj.body.type,
+      name: name
+    });
 
   }
 

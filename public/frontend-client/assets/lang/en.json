@@ -3,14 +3,20 @@
     "receive": {
       "repeat-holder": "How many times should it repeat",
       "repeat-label": "Repeating times",
-      "register": "Register audio receiving",
-      "cancel": "Cancel audio receiving",
-      "reset": "Reset repeat times to 1",
+      "repeat-reset": "Reset repeat times to 1",
+      "interval-holder": "How frequently checking new audio (ms)",
+      "interval-label": "Interval",
+      "interval-reset": "Reset interval to 30000",
       "error": {
         "number-valid": "Please enter a <strong>valid</strong> number",
         "number-min": "Please enter a number greater than or equal <strong>1</strong>",
-        "number-required": "Repeat times is <strong>required</strong>"
-      }
+        "number-required": "Repeat times is <strong>required</strong>",
+        "interval-valid": "Please enter a <strong>valid</strong> interval",
+        "interval-min": "Please enter an interval greater than or equal <strong>30000ms</strong>",
+        "interval-required": "Interval is <strong>required</strong>"
+      },
+      "register": "Register audio receiving",
+      "cancel": "Cancel audio receiving"
     }
   },
   "globals": {

@@ -30,10 +30,12 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
   isReceiving   = false;
   isRegister    = false;
   blobUrl;
+  blobType;
 
   count = 0;
 
   repeatFormControl: FormControl;
+  intervalFormControl: FormControl;
 
 
   constructor(@Inject(LOCALE_ID) locale: string,
@@ -47,7 +49,13 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
 
     this.setNgxTranslation(locale);
 
-    this.repeatFormControl = new FormControl('1', [
+    this.repeatFormControl = new FormControl(this.audioReceivingService.getDefaultMaxRepeat(), [
+      Validators.required,
+      Validators.pattern('^\\d*$'),
+      Validators.min(1)
+    ]);
+
+    this.intervalFormControl = new FormControl(this.audioReceivingService.getDefaultMaxInterval(), [
       Validators.required,
       Validators.pattern('^\\d*$'),
       Validators.min(1)
@@ -59,7 +67,7 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
 
     this.audioReceivingService.getReceivedBlobEvent().subscribe((data) => {
       this.toggleAudio(false);
-      this.blobUrl = (data) ? this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data)) : null;
+      this.makeAudioUrl(data);
     });
 
     this.audioReceivingService.isReceivingEvent().subscribe((v) => {
@@ -73,6 +81,11 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
     this.repeatFormControl.valueChanges.subscribe(value => {
       console.log('repeat times has changed:', value)
       this.toggleAudio(true);
+    });
+
+    this.intervalFormControl.valueChanges.subscribe(value => {
+      console.log('interval has changed:', value)
+      this.audioReceivingService.setInterval(value);
     });
 
   }
@@ -102,7 +115,7 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
       this.audioPlayingSubscriber.unsubscribe();
     }
     if (this.blobUrl) {
-      URL.revokeObjectURL(this.blobUrl);
+      Helpers.revokeObjectURL(this.blobUrl);
     }
     this.audioPlayerRef = null;
     this.blobUrl = null;
@@ -123,34 +136,51 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
     this.toggleAudio(true);
   }
 
-  toggleAudio(play: boolean) {
-    this.count = 0;
-
-    if (!this.audioPlayerRef || !play) {
-      if (this.audioPlayingSubscriber) {
-        this.audioPlayingSubscriber.unsubscribe();
-      }
-      if (this.audioPlayerRef) {
+  private playListener = () => {
+    this.audioPlayingSubscriber = timer(1000).subscribe((v) => {
+      if (this.count < this.repeatFormControl.value) {
+        this.audioPlayerRef.play();
+      } else {
         this.audioPlayerRef.pause();
         this.audioPlayerRef.currentTime = 0;
       }
+    });
+  };
+
+  toggleAudio(play: boolean) {
+    this.count = 0;
+    if (this.audioPlayingSubscriber) {
+      this.audioPlayingSubscriber.unsubscribe();
+    }
+    if (this.audioPlayerRef) {
+      this.audioPlayerRef.removeEventListener('ended', this.playListener);
+    }
+
+    if (!this.audioPlayerRef)
+      return;
+
+    if (!play) {
+      this.audioPlayerRef.pause();
+      this.audioPlayerRef.currentTime = 0;
       return;
     }
 
     this.count++;
-    this.audioPlayerRef.addEventListener('ended', () => {
-      this.audioPlayingSubscriber = timer(1000).subscribe((v) => {
-        if (this.count < this.repeatFormControl.value) {
-          this.audioPlayerRef.play();
-        } else {
-          this.audioPlayerRef.pause();
-          this.audioPlayerRef.currentTime = 0;
-        }
-      });
-    });
+    this.audioPlayerRef.addEventListener('ended', this.playListener);
     this.audioPlayerRef.play();
   }
 
+  makeAudioUrl(data: any) {
+    if (!data || !data.content) {
+      this.blobUrl = null;
+      return;
+    }
+    Helpers.createUrl(data.name, data.content, data.type, u => {
+      this.blobType = data.type || "";
+      this.blobUrl = (u) ? this.sanitizer.bypassSecurityTrustUrl(u) : null;
+    });
+
+  }
 
 
 }
