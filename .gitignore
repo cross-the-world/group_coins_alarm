@@ -6,5 +6,6 @@ logs/
 
 sqlite3/sqlite-dll-win64-x64-3310100/
 sqlite3/sqlite-tools-win32-x86-3310100/
+sqlite3/data/coinalarm
 
 package-lock.json

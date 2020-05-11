@@ -1,37 +1,53 @@
+<div class="container" fxLayoutAlign="center start" fxLayout="row" fxFlexWrap="wrap">
 
-<mat-card class="content" fxFlex fxLayoutAlign="center center" fxLayout="column" fxFlexWrap="wrap"
-          [style.borderRadius.px]="'10'"  [style.paddingTop.px]="'60'"
->
+  <mat-card class="content" fxFlex fxLayoutAlign="center center" fxLayout="column" fxFlexWrap="wrap"
+            [style.borderRadius.px]="'10'"
+  >
 
-  <div class="repeat" fxFlex>
+    <div class="repeat" fxFlex="20">
 
-    <form class="example-form">
-      <mat-form-field class="example-full-width" >
-        <mat-label>{{ 'app.receive.repeat-label' | translate }}</mat-label>
-        <input matInput [formControl]="repeatFormControl"  [placeholder]=" 'app.receive.repeat-holder' | translate">
-        <button mat-button *ngIf="repeatFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="repeatFormControl.patchValue(1)"
-                [matTooltip]="'app.receive.reset' | translate" [matTooltipDisabled]="disableHover">
-          <mat-icon>360</mat-icon>
-        </button>
-        <mat-error *ngIf="repeatFormControl.hasError('pattern')"  [innerHtml]="'app.receive.error.number-valid' | translate | sanitizeHtml" ></mat-error>
-        <mat-error *ngIf="repeatFormControl.hasError('min')"      [innerHtml]="'app.receive.error.number-min' | translate | sanitizeHtml" ></mat-error>
-        <mat-error *ngIf="repeatFormControl.hasError('required')" [innerHtml]="'app.receive.error.number-required' | translate | sanitizeHtml" ></mat-error>
-      </mat-form-field>
-    </form>
+      <form class="example-form">
+        <mat-form-field class="example-full-width" >
+          <mat-label>{{ 'app.receive.repeat-label' | translate }}</mat-label>
+          <input matInput [formControl]="repeatFormControl"  [placeholder]=" 'app.receive.repeat-holder' | translate">
+          <button mat-button *ngIf="repeatFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="repeatFormControl.patchValue(1)"
+                  [matTooltip]="'app.receive.repeat-reset' | translate" [matTooltipDisabled]="disableHover">
+            <mat-icon>360</mat-icon>
+          </button>
+          <mat-error *ngIf="repeatFormControl.hasError('pattern')"  [innerHtml]="'app.receive.error.number-valid' | translate | sanitizeHtml" ></mat-error>
+          <mat-error *ngIf="repeatFormControl.hasError('min')"      [innerHtml]="'app.receive.error.number-min' | translate | sanitizeHtml" ></mat-error>
+          <mat-error *ngIf="repeatFormControl.hasError('required')" [innerHtml]="'app.receive.error.number-required' | translate | sanitizeHtml" ></mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" >
+          <mat-label>{{ 'app.receive.interval-label' | translate }}</mat-label>
+          <input matInput [formControl]="intervalFormControl"  [placeholder]=" 'app.receive.interval-holder' | translate">
+          <button mat-button *ngIf="intervalFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="intervalFormControl.patchValue(1)"
+                  [matTooltip]="'app.receive.interval-reset' | translate" [matTooltipDisabled]="disableHover">
+            <mat-icon>360</mat-icon>
+          </button>
+          <mat-error *ngIf="repeatFormControl.hasError('pattern')"  [innerHtml]="'app.receive.error.interval-valid' | translate | sanitizeHtml" ></mat-error>
+          <mat-error *ngIf="repeatFormControl.hasError('min')"      [innerHtml]="'app.receive.error.interval-min' | translate | sanitizeHtml" ></mat-error>
+          <mat-error *ngIf="repeatFormControl.hasError('required')" [innerHtml]="'app.receive.error.interval-required' | translate | sanitizeHtml" ></mat-error>
+        </mat-form-field>
+      </form>
 
-  </div>
+    </div>
 
 
-  <div class="receive-buttons" fxLayout="row" fxLayoutAlign="center center" fxFill fxFlex>
-    <button mat-raised-button color="primary" (click)="register()"  [matTooltip]="'app.receive.register' | translate" [matTooltipDisabled]="disableHover" [disabled]="isRegister"><mat-icon>snooze</mat-icon></button>
-    <button mat-raised-button color="warn"    (click)="cancel()"    [matTooltip]="'app.receive.cancel' | translate"   [matTooltipDisabled]="disableHover" [disabled]="!isRegister"><mat-icon>stop</mat-icon></button>
-  </div>
+    <div class="receive-buttons" fxLayout="row" fxLayoutAlign="center center" fxFlex="15">
+      <button mat-raised-button color="primary" (click)="register()"  [matTooltip]="'app.receive.register' | translate" [matTooltipDisabled]="disableHover" [disabled]="isRegister"><mat-icon>snooze</mat-icon></button>
+      <button mat-raised-button color="warn"    (click)="cancel()"    [matTooltip]="'app.receive.cancel' | translate"   [matTooltipDisabled]="disableHover" [disabled]="!isRegister"><mat-icon>stop</mat-icon></button>
+    </div>
 
 
-  <div class="player" fxFlex>
-    <audio #audioRef  *ngIf="!isReceiving && blobUrl"  controls>
-      <source [src]="blobUrl" type="audio/webm">
-    </audio>
-  </div>
+    <div class="player" fxFlex>
+      <audio #audioRef  *ngIf="blobUrl"  controls>
+        <source [src]="blobUrl" [type]="blobType">
+        Your browser don't support playing audio
+      </audio>
+    </div>
 
-</mat-card>
+  </mat-card>
+
+
+</div>
