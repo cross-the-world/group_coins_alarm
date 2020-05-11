@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prod": "TENANT=coinheisst nodemon app.js --environment production",
+    "prod": "cross-env TENANT=coinheisst nodemon app.js --environment production",
     "dev": "cross-env DEBUG=app,app:* TENANT=coinheisst nodemon app.js --environment development ",
     "unit_tests": "mocha",
     "eslint": "eslint . --fix"

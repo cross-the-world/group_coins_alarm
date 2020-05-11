@@ -14,7 +14,7 @@ class Routes {
         debug('Style key', req.params.key);
         const sendDefault = (err) => {
             logger.parseError(err, req, res);
-            const theme = path.join(__dirname, '../..', cf['frontend'][req.params.key], 'styles-' + cf.tenant + '.css');
+		const theme = path.join(__dirname, '../..', cf['frontend'][req.params.key], 'styles-' + cf.tenant + '.css');
             return res.sendFile(theme);
         };
         sendDefault({message: 'theme not found from proxy server'});
