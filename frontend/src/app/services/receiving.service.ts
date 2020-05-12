@@ -126,6 +126,7 @@ export class AudioReceivingService {
     this._isReceiving.next(false);
 
     if (obj && obj.ok && !obj.body.type.includes('audio/') ) {
+      this._received.next(null);
       return;
     }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject, LOCALE_ID, ElementRef, ViewChild } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import { timer } from 'rxjs';
+import {BehaviorSubject, timer} from 'rxjs';
 
 import { DomSanitizer } from '@angular/platform-browser';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
@@ -37,6 +37,8 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
   repeatFormControl: FormControl;
   intervalFormControl: FormControl;
 
+  ended = new BehaviorSubject<boolean>(false);
+
 
   constructor(@Inject(LOCALE_ID) locale: string,
               private mediaObserver: MediaObserver,
@@ -65,10 +67,18 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
       // console.log('Media change:', change);
     });
 
+    this.ended.asObservable().subscribe(v => {
+      if (v) {
+        this.toggleAudio(false);
+      }
+    });
+  }
+
+  ngOnInit() {
+    console.log('initing app...');
+
     this.audioReceivingService.getReceivedBlobEvent().subscribe((data) => {
-      this.toggleAudio(false);
       this.makeAudioUrl(data);
-      this.toggleAudio(true);
     });
 
     this.audioReceivingService.isReceivingEvent().subscribe((v) => {
@@ -90,10 +100,6 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
       this.audioReceivingService.setInterval(value);
     });
 
-  }
-
-  ngOnInit() {
-    console.log('initing app...');
   }
 
   ngOnDestroy() {
@@ -138,19 +144,20 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
     //this.toggleAudio(true);
   }
 
+  private initPlayer = false;
+
   private playListener = () => {
     this.audioPlayingSubscriber = timer(1000).subscribe((v) => {
       if (this.count < this.repeatFormControl.value) {
         this.count++;
         this.audioPlayerRef.play();
       } else {
-        this.audioPlayerRef.pause();
-        this.audioPlayerRef.currentTime = 0;
+        this.ended.next(true);
       }
     });
   };
 
-  toggleAudio(play: boolean) {
+  private toggleAudio(play: boolean) {
     this.count = 0;
     if (this.audioPlayingSubscriber) {
       this.audioPlayingSubscriber.unsubscribe();
@@ -162,19 +169,30 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
     if (!this.audioPlayerRef)
       return;
 
-    if (!play) {
+    if (!play || !this.blobUrl) {
       this.audioPlayerRef.pause();
       this.audioPlayerRef.currentTime = 0;
       return;
     }
 
     this.count++;
+    this.ended.next(false);
     this.audioPlayerRef.addEventListener('ended', this.playListener);
+    this.audioPlayerRef.load();
     this.audioPlayerRef.play();
   }
 
-  makeAudioUrl(data: any) {
+  private makeAudioUrl(data: any) {
+    this.toggleAudio(false);
     if (!data || !data.content) {
+      if (!this.initPlayer) {
+        this.initPlayer = true;
+        this.blobType = "audio/mp3";
+        this.blobUrl = "assets/sounds/test_sound.mp3";
+        if (this.audioPlayerRef)
+          this.audioPlayerRef.load();
+        return;
+      }
       this.blobUrl = "";
       return;
     }
@@ -183,6 +201,10 @@ export class AppComponent extends BaseContainer implements OnInit, OnDestroy {
       Helpers.createUrl(data.name, data.content, data.type, u => {
         this.blobType = data.type || "audio/mp3";
         this.blobUrl = (u) ? this.sanitizer.bypassSecurityTrustUrl(u) : "";
+        this.toggleAudio(true);
+        if (this.blobUrl) {
+          this.initPlayer = true;
+        }
       });
       return;
     }

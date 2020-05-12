@@ -1,9 +1,9 @@
 {
   "app": {
     "receive": {
-      "repeat-holder": "How many times should it repeat",
-      "repeat-label": "Repeating times",
-      "repeat-reset": "Reset repeat times to 1",
+      "repeat-holder": "How many times should it re-play",
+      "repeat-label": "Re-play times",
+      "repeat-reset": "Reset re-play times to 1",
       "interval-holder": "How frequently checking new audio (ms)",
       "interval-label": "Interval",
       "interval-reset": "Reset interval to 30000",

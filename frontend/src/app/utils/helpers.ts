@@ -180,15 +180,13 @@ export class Helpers {
 
     // IE doesn't allow using a blob object directly as link href
     // instead it is necessary to use msSaveOrOpenBlob
-    if ( navigator && navigator.msSaveBlob ) {
+    if ( navigator && navigator.msSaveOrOpenBlob ) {
       navigator.msSaveOrOpenBlob( blob, name );
       return;
     }
 
     const u = this.createObjectURL(blob);
     console.log(u);
-    let isSuccess = true;
-    const self = this;
     if (u) {
       cb(u);
     } else {
